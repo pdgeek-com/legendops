@@ -13,10 +13,14 @@ legendops/
 │   ├── auth/             # Azure AD login and session service
 │   └── catalog/          # Product and service catalog API
 ├── db/                  # Microservice DB folders
-│   ├── auth_db/
-│   ├── billing_db/
-│   ├── portal_db/
-│   └── catalog_db/
+│   ├── auth_db/          # DB schema and migrations for auth service
+│   │   └── schema.sql
+│   ├── billing_db/       # DB schema and migrations for billing
+│   │   └── schema.sql
+│   ├── portal_db/        # DB schema and migrations for portal
+│   │   └── schema.sql
+│   └── catalog_db/       # DB schema and migrations for catalog
+│       └── schema.sql
 ├── frontend/             # React + Tailwind frontend
 │   ├── public/
 │   ├── src/
@@ -68,7 +72,7 @@ legendops/
 - Private endpoints for DB, KV
 - DDoS Basic (can upgrade to Standard)
 
-## 🧠 Database Design (PostgreSQL)
+## 🧐 Database Design (PostgreSQL)
 **Multi-db per microservice pattern:**
 - `auth_db`: Users, sessions, tokens
 - `billing_db`: Invoices, usage data, Pax8 sync
