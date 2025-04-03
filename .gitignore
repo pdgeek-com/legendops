@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.env
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+*.bak
+
+# Docker
+*.tar
+.env.*
+
+# Node
+node_modules/
+*.lock
+
+# System
+.DS_Store
+Thumbs.db
