@@ -30,7 +30,9 @@ legendops/
 │   ├── monitor.bicep     # Grafana Cloud / Azure Monitor setup
 │   ├── db.bicep          # PostgreSQL and diagnostic settings
 │   ├── identity.bicep    # Azure AD + Managed Identities
-│   └── networking.bicep  # NSGs, vNet, App Gateway
+│   ├── networking.bicep  # NSGs, vNet, App Gateway
+│   ├── variables.bicep   # Common variables for reuse
+│   └── tags.bicep        # Tag schema for billing and tracking
 ├── media/                # Product images, diagrams, and stencils
 │   ├── product-images/
 │   ├── visio-stencils/
@@ -43,14 +45,18 @@ legendops/
 
 ## ☁️ Azure Architecture Overview
 - Resource Group per environment (`legendops-dev`, `legendops-prod`)
+- Azure Subscription configurable via .env
+- Tags: `Project`, `Environment`, `Owner`, `CostCenter`
 - Azure Container Apps (frontend, backend, microservices)
-- Azure Database for PostgreSQL Flexible Server
+- Azure Database for PostgreSQL Flexible Server (per-db setup)
 - Azure Blob Storage (for product images, Visio stencils)
 - Azure Key Vault + App Config
 - Azure Monitor Workspace
 - Azure AD B2B (M365 login per tenant)
 - App Gateway or Front Door for ingress
 - NSGs + private vNet routing for backend services
+- Auto-scaling enabled
+- Shutdown script to deallocate resources in Dev when idle
 
 ## 🔐 Security & Identity
 ### Azure AD (Multi-Tenant)
@@ -72,7 +78,7 @@ legendops/
 - Private endpoints for DB, KV
 - DDoS Basic (can upgrade to Standard)
 
-## 🧐 Database Design (PostgreSQL)
+## 🤔 Database Design (PostgreSQL)
 **Multi-db per microservice pattern:**
 - `auth_db`: Users, sessions, tokens
 - `billing_db`: Invoices, usage data, Pax8 sync
