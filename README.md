@@ -32,7 +32,8 @@ legendops/
 │   ├── identity.bicep    # Azure AD + Managed Identities
 │   ├── networking.bicep  # NSGs, vNet, App Gateway
 │   ├── variables.bicep   # Common variables for reuse
-│   └── tags.bicep        # Tag schema for billing and tracking
+│   ├── tags.bicep        # Tag schema for billing and tracking
+│   └── microdb.bicep     # Module to deploy per-service PostgreSQL DBs
 ├── media/                # Product images, diagrams, and stencils
 │   ├── product-images/
 │   ├── visio-stencils/

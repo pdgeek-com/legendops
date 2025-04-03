@@ -1,53 +1,40 @@
-# deploy.py
 import os
 import subprocess
 from pathlib import Path
-
-# Load environment variables from .env
 from dotenv import load_dotenv
-load_dotenv()
 
-# Config
-ENVIRONMENT = os.getenv("ENVIRONMENT", "dev")
-LOCATION = os.getenv("LOCATION", "eastus")
-RESOURCE_GROUP = f"legendops-{ENVIRONMENT}"
-BICEP_FILE = "infra/main.bicep"
+# Load environment variables from infra/.env
+env_path = Path("infra/.env")
+load_dotenv(dotenv_path=env_path)
 
-# Step 1: Create Resource Group
-def create_resource_group():
-    print(f"\n🔧 Creating resource group: {RESOURCE_GROUP} in {LOCATION}...")
-    subprocess.run([
-        "az", "group", "create",
-        "--name", RESOURCE_GROUP,
-        "--location", LOCATION
-    ], check=True)
+# Ensure Azure CLI is logged in
+print("🔐 Verifying Azure CLI login...")
+subprocess.run(["az", "account", "show"], check=True)
 
-# Step 2: Deploy Bicep Template
-def deploy_bicep():
-    print(f"\n🚀 Deploying Bicep template: {BICEP_FILE}...")
-    subprocess.run([
-        "az", "deployment", "group", "create",
-        "--resource-group", RESOURCE_GROUP,
-        "--template-file", BICEP_FILE,
-        "--parameters",
-        f"environment={ENVIRONMENT}",
-        f"location={LOCATION}",
-        f"resourcePrefix=legendops"
-    ], check=True)
+# Set variables from .env
+RESOURCE_GROUP = os.getenv("RESOURCE_GROUP")
+LOCATION = os.getenv("LOCATION")
+SUBSCRIPTION_ID = os.getenv("AZURE_SUBSCRIPTION_ID")
 
-# Step 3: GitHub push (optional)
-def git_push():
-    print("\n📦 Pushing changes to GitHub...")
-    subprocess.run(["git", "add", "."], check=True)
-    subprocess.run(["git", "commit", "-m", "Automated deploy + Bicep push"], check=False)
-    subprocess.run(["git", "push", "origin", "main"], check=True)
+# Ensure correct subscription
+print(f"📌 Setting subscription to {SUBSCRIPTION_ID}")
+subprocess.run(["az", "account", "set", "--subscription", SUBSCRIPTION_ID], check=True)
 
-# Main Runner
-def main():
-    create_resource_group()
-    deploy_bicep()
-    # Uncomment to auto-push
-    # git_push()
+# Create resource group if it doesn't exist
+print(f"📁 Creating resource group: {RESOURCE_GROUP}")
+subprocess.run([
+    "az", "group", "create",
+    "--name", RESOURCE_GROUP,
+    "--location", LOCATION
+], check=True)
 
-if __name__ == "__main__":
-    main()
+# Deploy the Bicep infrastructure
+print("🚀 Deploying infrastructure with Bicep...")
+subprocess.run([
+    "az", "deployment", "group", "create",
+    "--resource-group", RESOURCE_GROUP,
+    "--template-file", "infra/main.bicep",
+    "--parameters", f"@infra/.env"
+], check=True)
+
+print("✅ Azure infrastructure deployed successfully.")

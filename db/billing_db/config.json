@@ -1,0 +1,7 @@
+{
+  "db_name": "billing_db",
+  "user": "legendops_user",
+  "password": "JLJCLoPMdcrSOIXL-s8QNQ",
+  "host": "localhost",
+  "port": 5432
+}
