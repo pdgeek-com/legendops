@@ -1,4 +1,3 @@
----
 # LegendOps
 
 ## 🔧 Overview
@@ -137,5 +136,3 @@ Common conventions:
 | Week 6 | Prod launch w/ Grafana Cloud and Key Vault monitoring |
 | Week 7 | Product Catalog API + media storage |
 | Week 8 | Stencil management + cable calculation framework |
-
----
